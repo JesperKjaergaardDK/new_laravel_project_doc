@@ -24,10 +24,12 @@ Thees commands are meant for when everything is sat up and your are ready to bei
 
 ## Create a new table 
 Makes a model as well as a controller for the model <br/>
-"php artisan make:model [model name] -mcr"
-* m = to create a model
-* c = to create a controller
+"php artisan make:model [model name] -mcrfs"
+* m = to create a model file
+* c = to create a controller file
 * r = adds resource to the contorller file
+* f = to create a factori file
+* s = to create a seed file
 
 Now in databse/migrations folder there will be a file dateed form when you made the model and it contain a schemnatic over the tabel when you are going to migrate into the database. 
 examble:
