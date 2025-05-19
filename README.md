@@ -19,31 +19,113 @@ And database is within
 http://localhost/phpmyadmin/
 
 
-# Database help
-Thees commands are meant for when everything is sat up and your are ready to beign your code adventure
+# Model & Controller
+So laravel is build on model, controller and view where model is for the database and controller to share databse info with the view.
+for that reason we need to build a model before we can make a controller
 
-## Create a new table 
-Makes a model as well as a controller for the model <br/>
-"php artisan make:model [model name] -mcr"
-* m = to create a model
+So to create a model we will use this command<br/><br/>
+**REMEMBER model names need to be in PascalCase!!!!!**<br/>
+"php artisan make:model [model name]" -mcrfs
+
+* m = to create a migration file
 * c = to create a controller
-* r = adds resource to the contorller file
+* r = adds resource to the contorller file ('creates method for controller to talk to the model of manupulations or getting of data')
 
-Now in databse/migrations folder there will be a file dateed form when you made the model and it contain a schemnatic over the tabel when you are going to migrate into the database. 
-examble:
+* f = to create a factoris file ('create mass random data need to be used with seed')
+* s = to create a seed file ('sends data to database auto')
 
-* $table->id();
-* $table->string('title');
-* $table->text('content');
-* $table->timestamps(); 
 
-Now you should be able to migrate with command below and it will now be added to your database ps remember to refresh your database if you dont see it  <br/>
-"php artisan migrate"
+## Model
+For models it controlls the database for what data is alowed in and out 
 
-Then before we can create a request to our database within the specified table the model you have created you need to specify what can get send to the database of information for protection so in this case it would be  <br/>
-protected $fillable = ['title', 'content']
+Her is an examble of protection agenst mass asignment ('sends array of data to the db') it will help project with only being able to be sendt/ update only thess three rows in the db will be able while if there are others inputs thats not in view will be delt within laravel such as id feks. <br/> <br/>
+protected $fillable = ['name', 'password', 'email'];<br/><br/>
 
-## CRUD
+There is also another way to improve securite like using an arrow with attributes like type or rquired something that could be change in the view so it helps where it wont be able to be just changed<br/> <br/>
+protected $fillable = [
+  'name' => 'required|string|max:255',
+  'email' => 'required|email|unique:users',
+];<br/>
+
+## Controller
+Controller helps for the data we ask from our model
+
+## Migration
+With migration this will help to build your database
+
+Here is an examble of on schema of the table i wish to be created in my database<br/>
+Here we can se that it will **create an id, product_name, price, quantity and timestamps that create created_at and updated_at**<br/><br/>
+
+we simply say what type they contain and we can also give them more informaiton sutch as a **nullable()** to say they are allowed to be empty
+and we dont really need to say id is primary with auto generation sense it already know that itself so most of the work can be done on its own regard <br/><br/>
+
+Schema::create('storage_items', function (Blueprint $table) {<br/>
+  $table->id();<br/>
+  $table->string('product_name')->default('');<br/>
+  $table->integer('price');<br/>
+  $table->integer('quantity')->nullable();<br/>
+  $table->timestamps();<br/>
+});<br/><br/>
+
+*php artisan migrate ('to upload the tables into your database')
+
+## Factories
+With factories we build data formats that will be send to our database so we dont have to do it all manually <br/>
+We do go back to our **Migation file** to see what it needs and use them we use someting like
+
+* fake ('to say false information/ random')
+* word/name/city ('add one of thees like name if it was a user we wanted to create')
+
+ return [<br/>
+  'product_name' => fake()->word(),<br/>
+  'price' => fake() -> numberBetween(100, 10000),<br/>
+  'quantity' => fake() -> numberBetween(1, 100),<br/>
+  'created_at' => now(),<br/>
+  'updated_at' => now(),<br/>
+];<br/>
+
+## Seeders
+In  our seeders we then get to call our **Factories** or we can create our own data and send up if its something specific <br/><br/>
+
+Here is an examble with **Factories** <br/> 
+With this we will need to call our model that will find the factorie for us with its own models 
+and within the function in the run we call our model and creates with the amount we want in this examble 50 that when run will creatre them all in the db when its done 
+
+use App\Models\StorageItem;<br/>
+
+public function run(): void <br/>
+{StorageItem::factory()->count(50)->create(); }<br/><br/>
+
+
+In this examble we dont need to call our model to find our factories sense it doesnt exist insted we can hard code what roles need to be created and only thees data will be sendt to the db<br/>
+
+public function run(): void <br/>
+{  Role::create([   'role' => 'Employee', ]); <br/>
+Role::create([ 'role' => 'Manager',]); } <br/><br/>
+
+And the one thing you will need to do is put them all in the file called DatabaseSeeder sense it's the only file to be ran buy a specifc command  <br/>
+it will call the other seed classes you have made just becarful when using forign keys then you might want to structur them a bit diffrent <br/>
+
+ $this->call([<br/>
+   RoleSeeder::class<br/>
+   UserSeeder::class<br/>
+   StorageItemSeeder::class,<br/>
+]);<br/>
+
+
+
+### RUN Seed
+For running the seed you should call this in the terminal<br/>
+**php artisan db:seed** <br/><br/>
+
+There is also other ways to do it if you also want to fix some bugs or updates migration or even delete all data<br/>
+
+* make:reset ('Removes all tables in the database exept migration')
+* make:fresh ('Combinds with removeing all tables and makes add them in again')
+* --seed ('To send data best used with **make:fresh**')
+
+
+## Routing
 https://laravel.com/docs/11.x/controllers <br/>
 So if we need to use CRUD we need to do a few things before we can begin first we need to prepare a route for 
 
