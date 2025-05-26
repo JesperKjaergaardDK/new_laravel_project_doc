@@ -1,5 +1,6 @@
 # Laravel project setup for new
-
+Follow good guide use it for first time download or messed something up like deleting xammp and downloading it to another folder
+https://www.youtube.com/watch?v=iBaM5LYgyPk
 
 # New project 
 Remember to start up XAMMP with both "Apache" & "MySQL"
