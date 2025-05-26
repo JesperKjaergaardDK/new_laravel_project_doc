@@ -2,6 +2,12 @@
 Follow good guide use it for first time download or messed something up like deleting xammp and downloading it to another folder
 https://www.youtube.com/watch?v=iBaM5LYgyPk
 
+# Cloning of laravel
+So sadly noting will work as it should when getting the project to a new device but for that you should run thees commands 
+* npm i
+* composer i
+* php artisan key:generate (Create your env file first before running this command)(it's used for encryption and decryption so remember to save it in some place or else)
+
 # New project 
 Remember to start up XAMMP with both "Apache" & "MySQL"
 
