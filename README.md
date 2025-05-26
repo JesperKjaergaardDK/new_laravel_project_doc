@@ -127,9 +127,9 @@ For running the seed you should call this in the terminal<br/>
 
 There is also other ways to do it if you also want to fix some bugs or updates migration or even delete all data<br/>
 
-* make:reset ('Removes all tables in the database exept migration')
-* make:fresh ('Combinds with removeing all tables and makes add them in again')
-* --seed ('To send data best used with **make:fresh**')
+* php artisan migrate:reset ('Removes all tables in the database exept migration')
+* php artisan migrate:fresh ('Combinds with removeing all tables and makes add them in again')
+* php artisan migrate:fresh --seed ('To send data best used with **migrate:fresh**')
 
 
 ## Routing
